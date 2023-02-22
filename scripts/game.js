@@ -37,17 +37,6 @@ function addTurn() {
     showTurns();
 }
 
-function lightsOn(circ) {
-    document.getElementById(circ).classList.add(circ + "light");
-    setTimeout(function () {
-        document.getElementById(circ).classList.remove(circ + "light");
-    }, 400);
-}
-
-function showScore() {
-    document.getElementById("score").innerText = game.score;
-}
-
 function showTurns() {
     game.turnInProgress = true;
     game.turnNumber = 0;
@@ -59,6 +48,13 @@ function showTurns() {
             game.turnInProgress = false;
         }
     }, 800);
+}
+
+function lightsOn(circ) {
+    document.getElementById(circ).classList.add("light");
+    setTimeout(function () {
+        document.getElementById(circ).classList.remove("light");
+    }, 400);
 }
 
 function playerTurn() {
@@ -73,6 +69,10 @@ function playerTurn() {
         alert("Wrong move!");
         newGame();
     }
+}
+
+function showScore() {
+    document.getElementById("score").innerText = game.score;
 }
 
 module.exports = { game, newGame, showScore, addTurn, lightsOn, showTurns, playerTurn };
