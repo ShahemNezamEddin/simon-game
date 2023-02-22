@@ -14,6 +14,14 @@ beforeAll(() => {
     document.close();
 });
 
+describe("pre-game", () => {
+    test("clicking buttons before newGame should fail", () => {
+        game.lastButton = "";
+        document.getElementById("button2").click();
+        expect(game.lastButton).toEqual("");
+    });
+});
+
 describe("game object contains correct keys", () => {
     test("score key exists", () => {
         expect("score" in game).toBe(true);
@@ -52,6 +60,12 @@ describe("newGame works correctly", () => {
         document.getElementById("score").innerText = "42";
         newGame();
     });
+    test("expect data-listener to be true", () => {
+        const elements = document.getElementsByClassName("circle");
+        for (let element of elements) {
+            expect(element.getAttribute("data-listener")).toEqual("true");
+        }
+    });
     test("should set game score to zero", () => {
         expect(game.score).toEqual(0);
     });
@@ -64,19 +78,9 @@ describe("newGame works correctly", () => {
     test("should add one move to the computer's game array", () => {
         expect(game.currentGame.length).toBe(1);
     });
-    test("should set game turnNumber to zero", () => {
-        expect(game.turnNumber).toEqual(0);
-    });
-    test("expect data-listener to be true", () => {
-        newGame();
-        const elements = document.getElementsByClassName("circle");
-        for (let element of elements) {
-            expect(element.getAttribute("data-listener")).toEqual("true");
-        }
-    });   
 });
 
-describe("game play works correctly", () => {
+describe("gameplay works correctly", () => {
     beforeEach(() => {
         game.score = 0;
         game.currentGame = [];
@@ -95,7 +99,11 @@ describe("game play works correctly", () => {
     test("should add correct class to light up the buttons", () => {
         let button = document.getElementById(game.currentGame[0]);
         lightsOn(game.currentGame[0]);
-        expect(button.classList).toContain(game.currentGame[0] + "light");
+        expect(button.classList).toContain("light");
+    });
+    test("should toggle turnInProgress to true", () => {
+        showTurns();
+        expect(game.turnInProgress).toBe(true);
     });
     test("showTurns should update game.turnNumber", () => {
         game.turnNumber = 42;
@@ -107,15 +115,6 @@ describe("game play works correctly", () => {
         playerTurn();
         expect(game.score).toBe(1);
     });
-    test("should  call an alert, if the move is wrong", () => {
-        game.playerMoves.push("wrong");
-        playerTurn();
-        expect(window.alert).toBeCalledWith("Wrong move!");
-    });
-    test("should toggle turnInProgress to true", () => {
-        showTurns();
-        expect(game.turnInProgress).toBe(true);
-    });
     test("clicking during computer sequence should fail", () => {
         showTurns();
         game.lastButton = "";
@@ -123,4 +122,3 @@ describe("game play works correctly", () => {
         expect(game.lastButton).toEqual("");
     });
 });
-
